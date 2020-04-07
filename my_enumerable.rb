@@ -13,4 +13,11 @@ module Enumerable
     end
   end
 
+  def my_select 
+    #select method working the same as each
+    for element in self
+     yield(element)
+   end
+ end
+
 end

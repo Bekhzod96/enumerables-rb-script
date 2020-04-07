@@ -5,7 +5,7 @@
 >Enumerable module that gets mixed into the Array and Hash classes (among others) and provides you with lots of handy iterator methods. To prove that there’s no magic to it, I am going to rebuild those methods.
 
 
-In this project, we have written adding my new methods onto the existing Enumerable module. Ruby makes this easy for you because any class or module can be added to without trouble.
+Ruby makes this easy for you because any class or module can be added to without trouble.
 
 ## Built With
 

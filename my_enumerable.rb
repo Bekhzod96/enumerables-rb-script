@@ -62,4 +62,38 @@ def my_all?(args = nil)
     result   
 end
 
+def my_none?(args = nil)
+  result = true
+  if !args.nil?
+    "This is args"
+    if is_a? Hash
+      my_each{ |item, value|
+      break result = false unless value.class == args }
+    else
+      my_each{ |value|
+      break result = false unless item.class == args}
+    end 
+  end
+  unless block_given?
+    if is_a? Hash 
+      my_each { |item|
+      result = false if item[1]  == true }
+    else 
+      my_each { |item|
+      yield(item[0], item[1])
+      result = false unless item[1] == true  }
+    end
+  else
+    if is_a? Hash
+      my_each{ |item, value|
+      break result = false if yield(item, value) == true }
+    else
+      my_each{ |value|
+      break result = false if yield(value) == true
+    }
+    end
+  end
+    result   
+end
+
 end

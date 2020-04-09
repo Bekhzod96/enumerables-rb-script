@@ -1,5 +1,4 @@
-# rubocop:disable Style/LineLength, Style/StringLiterals
-# rubocop:disable all
+# rubocop:disable Style/CaseEquality, Metrics/ModuleLength, Style/For, Lint/RedundantCopDisableDirective
 module Enumerable
   def my_each
     for item in self

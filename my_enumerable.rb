@@ -117,4 +117,13 @@ def my_count(args=nil)
   result
 end
 
+def my_map
+  result = [] 
+  for i in self
+    i = yield(i) if block_given?
+    result.push(i)
+  end 
+  result
+end
+
 end

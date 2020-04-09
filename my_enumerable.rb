@@ -149,3 +149,5 @@ module Enumerable
     inject { |item| item * item }
   end
 end
+
+# rubocop:enable all

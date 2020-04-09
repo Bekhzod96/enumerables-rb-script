@@ -1,8 +1,8 @@
 # Enumerables methods
 
-**In this project, I will implement my own version of Ruby’s enumerable methods**
+**In this project, I implement my own version of Ruby’s enumerable methods**
 
->Enumerable module that gets mixed into the Array and Hash classes (among others) and provides you with lots of handy iterator methods. To prove that there’s no magic to it, I am going to rebuild those methods.
+>Enumerable module that gets mixed into the Array and Hash classes (among others) and provides you with lots of handy iterator methods. To prove that there’s no magic to it, I rebuilt those methods.
 
 
 Ruby makes this easy for you because any class or module can be added to without trouble.

@@ -144,4 +144,8 @@ def my_inject(args = -1 )
     memo
 end
 
+def multiply_els
+  inject{|item| item*item}
+end
+
 end

@@ -126,4 +126,22 @@ def my_map
   result
 end
 
+def my_inject(args = -1 )
+  memo = 0
+    if is_a? Range 
+      count = -1
+      for i in self
+        count+=1
+        next if count < args
+        memo = yield(memo,i)        
+      end
+    else
+      stor = '' 
+      my_each{ |item|
+        stor = yield(stor, item) }
+      memo = stor
+    end
+    memo
+end
+
 end

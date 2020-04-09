@@ -102,4 +102,19 @@ def my_none?(args = nil)
     result   
 end
 
+def my_count(args=nil)
+  result = self.size
+  count = 0
+  if !args.nil?
+    my_each{|item|
+    item == args ? count+=1 : nil }
+    result = count
+  elsif block_given?
+    my_each{|item|
+    count +=1 if yield(item) == true}
+    result = count
+  end
+  result
+end
+
 end

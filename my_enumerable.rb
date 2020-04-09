@@ -1,4 +1,4 @@
-# rubocop:disable Style/CaseEquality, Metrics/ModuleLength, Style/For, Lint/RedundantCopDisableDirective
+# rubocop:disable all
 module Enumerable
   def my_each
     for item in self
@@ -12,133 +12,133 @@ module Enumerable
     end
   end
 
-  def my_select 
+  def my_select
     for element in self
-     yield(element)
+      yield(element)
    end
  end
 
   def my_any?(args = nil)
     result = true
-    if !block_given? && args == nil
-      self.empty? ? result = false : nil 
-      self.my_each{ |item|
-      if is_a? Hash
-        result = false if item[1] == false || item[1] == nil
-      elsif item == nil
-        result = false 
-      else
-        result = false if item == false || item == nil
-      end 
+    if !block_given? && args.nil?
+      empty? ? result = false : nil
+      my_each { |item|
+        if is_a? Hash
+          result = false if item[1] == false || item[1].nil?
+        elsif item.nil?
+          result = false
+        else
+          result = false if item == false || item.nil?
+        end
       }
-      result 
+      result
     else
-      my_select { |key, value|  yield(key, value)  } if is_a? Hash
-      my_each { |key|  yield(key) } 
+      my_select { |key, value| yield(key, value) } if is_a? Hash
+      my_each { |key| yield(key) }
     end
   end
 
   def my_all?(args = nil)
     result = true
-    if !args.nil?
+    unless args.nil?
       if is_a? Hash
-        my_each{ |item, value|
+        my_each { |_item, value|
         break result = false unless value.class == args }
       else
-        my_each{ |value|
+        my_each { |_value|
         break result = false unless item.class == args}
-      end 
+      end
     end
     unless block_given?
-      if is_a? Hash 
-        my_each { |item|
-        result = false if item[1]  == false || item[1]  == nil }
-      else 
-        my_each { |item|
-        result = false if item == false || item == nil  }
+      if is_a? Hash
+        my_each do |item|
+        result = false if item[1] == false || item[1] == nil end
+      else
+        my_each do |item|
+        result = false if item == false || item.nil? end
       end
     else
       if is_a? Hash
-        my_each{ |item, value|
-        break result = false if yield(item, value) == false || yield(item, value) == nil  }
+        my_each { |item, value|
+        break result = false if yield(item, value) == false || yield(item, value).nil? }
       else
-        my_each{ |value|
-        break result = false if yield(value) == false || yield(value) == nil
-      }
+        my_each { |value|
+        break result = false if yield(value) == false || yield(value).nil?
+        }
       end
     end
-      result   
+    result
   end
 
   def my_none?(args = nil)
     result = true
-    if !args.nil?
+    unless args.nil?
       if is_a? Hash
-        my_each{ |item, value|
+        my_each { |_item, value|
         break result = false unless value.class == args }
       else
-        my_each{ |value|
+        my_each { |_value|
         break result = false unless item.class == args}
-      end 
+      end
     end
     unless block_given?
-      if is_a? Hash 
-        my_each { |item|
-        result = false if item[1]  == true }
-      else 
-        my_each { |item|
-        result = false if item == true  }
+      if is_a? Hash
+        my_each do |item|
+        result = false if item[1] == true end
+      else
+        my_each do |item|
+        result = false if item == true end
       end
     else
       if is_a? Hash
-        my_each{ |item, value|
+        my_each { |item, value|
         p yield(item, value) == true
         break result = false if yield(item, value) == true }
       else
-        my_each{ |value|
+        my_each { |value|
         break result = false if yield(value) == true
-      }
+        }
       end
     end
-      result   
+    result
   end
 
-  def my_count(args=nil)
-    result = self.size
+  def my_count(args = nil)
+    result = size
     count = 0
     if !args.nil?
-      my_each{|item|
-      item == args ? count+=1 : nil }
+      my_each { |item|
+      item == args ? count += 1 : nil }
       result = count
     elsif block_given?
-      my_each{|item|
-      count +=1 if yield(item) == true}
+      my_each { |item|
+      count += 1 if yield(item) == true}
       result = count
     end
     result
   end
 
   def my_map
-    result = [] 
+    result = []
     for i in self
       i = yield(i) if block_given?
       result.push(i)
-    end 
+    end
     result
   end
 
-  def my_inject(args = -1 )
+  def my_inject(args = -1)
     memo = 0
-    if is_a? Range 
+    if is_a? Range
       count = -1
       for i in self
-        count+=1
+        count += 1
         next if count < args
-        memo = yield(memo,i)        
+        memo = yield(memo, i)
       end
     else
-      stor = '' 
-      my_each{ |item|
+      stor = ''
+      my_each { |item|
         stor = yield(stor, item) }
       memo = stor
     end
@@ -146,7 +146,6 @@ module Enumerable
   end
 
   def multiply_els
-    inject{|item| item*item}
+    inject { |item| item * item }
   end
-
 end

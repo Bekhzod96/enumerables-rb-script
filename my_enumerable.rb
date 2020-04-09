@@ -1,3 +1,5 @@
+# rubocop:disable Style/LineLength, Style/StringLiterals
+# rubocop:enable Style/LineLength, Style/StringLiterals
 module Enumerable
   def my_each
     for item in self

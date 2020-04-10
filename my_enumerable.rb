@@ -146,6 +146,7 @@ module Enumerable
     memo
   end
 
+  
   # rubocop:enable all
   def multiply_els
     inject { |item| item * item }

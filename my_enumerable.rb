@@ -3,40 +3,76 @@
 module Enumerable
   def my_each
     for item in self
-      yield(item)
+      if block_given?
+        yield(item)
+      else
+        item
+      end
     end
   end
 
   def my_each_with_index
+    index=0
     for item in self
-      yield(item, index(item))
+      if block_given?
+      yield(item, index)
+      else
+        item
+      end
+      index+=1
     end
   end
 
   def my_select
-    for element in self
-      yield(element)
+     result =[]
+    for item in self
+      if block_given?
+        result.push(item) if yield(item) == true
+      else
+        item
+      end
    end
+   result
  end
 
   def my_any?(args = nil)
-    result = true
-    if !block_given? && args.nil?
-      empty? ? result = false : nil
-      my_each do |item|
-        if is_a? Hash
-          result = false if item[1] == false || item[1].nil?
-        elsif item.nil?
-          result = false
-        else
-          result = false if item == false || item.nil?
+    result = false
+    unless args.nil?
+      if is_a? Hash
+        my_each do |_item, value|
+        break result = false unless value.class == args end
+      elsif args.is_a? Regexp
+        my_each do |value| 
+          break p result = true  unless (value =~ args).nil?        
         end
+      elsif (args == String) || (args == Integer) ||  (args == Float) ||  (args == Numeric)
+        my_each do |value| 
+          break result = true if value.class == args  
+        end
+      else
+        my_each do |value|
+        break result = true if value == args end
       end
-      result
-    else
-      my_select { |key, value| yield(key, value) } if is_a? Hash
-      my_each { |key| yield(key) }
     end
+
+    if !block_given? 
+      if is_a? Hash
+        my_each do |item|
+        break result = true if item[1] == true end
+      else
+        my_each do |item|
+        break result = true if item == true end
+      end
+    else
+      if is_a? Hash
+        my_each do |item, value|
+        break result = true if yield(item, value) == true end
+      else
+        my_each do |value|
+          break result = true if yield(value) == true  end
+      end
+    end
+    result
   end
 
   def my_all?(args = nil)
@@ -45,12 +81,20 @@ module Enumerable
       if is_a? Hash
         my_each do |_item, value|
         break result = false unless value.class == args end
+      elsif args.is_a? Regexp
+        my_each do |value| 
+          result = false  if (value =~ args).nil?        
+        end
+      elsif (args == String) || (args == Integer) ||  (args == Float) ||  (args == Numeric)
+        my_each do |value| 
+          break result = false unless value.class == args  
+        end
       else
-        my_each do |_value|
-        break result = false unless item.class == args end
+        my_each do |value|
+        break result = false unless value == args end
       end
     end
-    unless block_given?
+    unless block_given? && args.nil?
       if is_a? Hash
         my_each do |item|
         result = false if item[1] == false || item[1].nil? end
@@ -74,15 +118,23 @@ module Enumerable
   def my_none?(args = nil)
     result = true
     unless args.nil?
-      if is_a? Hash
+     if is_a? Hash
         my_each do |_item, value|
         break result = false unless value.class == args end
+     elsif args.is_a? Regexp
+        my_each do |value| 
+          break result = false  unless (value =~ args).nil?        
+        end
+     elsif (args == String) || (args == Integer) ||  (args == Float) ||  (args == Numeric)
+        my_each do |value| 
+          break result = false if value.class == args  
+        end
       else
-        my_each do |_value|
-        break result = false unless item.class == args end
+        my_each do |value|
+        break result = false if value == args end
       end
     end
-    unless block_given?
+    unless block_given? && args.nil?
       if is_a? Hash
         my_each do |item|
         result = false if item[1] == true end
@@ -93,7 +145,6 @@ module Enumerable
     else
       if is_a? Hash
         my_each do |item, value|
-        p yield(item, value) == true
         break result = false if yield(item, value) == true end
       else
         my_each do |value|
@@ -121,29 +172,34 @@ module Enumerable
 
   def my_map
     result = []
-    for i in self
-      i = yield(i) if block_given?
-      result.push(i)
+    if block_given? 
+      my_each do  |item| 
+        result.push(yield(item)) end
+      return result
+    else
+      my_each
     end
-    result
+   
   end
 
-  def my_inject(args = -1)
-    memo = 0
-    if is_a? Range
-      count = -1
-      for i in self
-        count += 1
-        next if count < args
-        memo = yield(memo, i)
+  def my_inject(arg=nil,sym=nil)
+    memo = 1
+    if !block_given? 
+      case sym
+      when :*
+       my_each {|item| memo *= item} 
+      when :+
+        memo = 0
+        my_each {|item| memo += item} 
+      when :/
+        my_each {|item| memo /= item} 
+      else
+        p "Invalid value"
       end
     else
-      stor = ''
-      my_each do |item|
-        stor = yield(stor, item) end
-      memo = stor
+      my_each do |item| memo = yield(memo, item) end
     end
-    memo
+    !arg.nil? ? memo*=arg :  memo
   end
 
   

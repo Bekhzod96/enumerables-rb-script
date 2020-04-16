@@ -1,36 +1,30 @@
 
-# rubocop:disable all
+# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
+
 module Enumerable
   def my_each
+    return to_enum :my_each unless block_given?
     for item in self
-      if block_given?
         yield(item)
-      else
-        item
-      end
     end
   end
 
   def my_each_with_index
-    index=0
+    return to_enum :my_each unless block_given?
+    index = 0
     for item in self
-      if block_given?
       yield(item, index)
-      else
-        item
-      end
       index+=1
     end
   end
 
   def my_select
+    return to_enum :my_each unless block_given?
      result =[]
     for item in self
-      if block_given?
         result.push(item) if yield(item) == true
-      else
-        item
-      end
    end
    result
  end
@@ -172,14 +166,10 @@ module Enumerable
 
   def my_map
     result = []
-    if block_given? 
+    return to_enum :my_map unless block_given?
       my_each do  |item| 
         result.push(yield(item)) end
-      return result
-    else
-      my_each
-    end
-   
+      return result 
   end
 
   def my_inject(arg=nil,sym=nil)
@@ -201,10 +191,13 @@ module Enumerable
     end
     !arg.nil? ? memo*=arg :  memo
   end
-
   
   # rubocop:enable all
   def multiply_els
     inject { |item| item * item }
   end
 end
+
+
+p (1..5).my_inject(4) { |prod, n| prod * n }
+p (1..5).inject(:+) 

@@ -1,7 +1,4 @@
-
-# rubocop:disable Metrics/ModuleLength
-# rubocop:disable Metrics/CyclomaticComplexity
-# rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable all
 
 module Enumerable
   def my_each
@@ -197,7 +194,3 @@ module Enumerable
     inject { |item| item * item }
   end
 end
-
-
-p (1..5).my_inject(4) { |prod, n| prod * n }
-p (1..5).inject(:+) 

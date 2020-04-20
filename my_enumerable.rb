@@ -200,5 +200,3 @@ end
 def multiply_els
   inject { |item| item * item }
 end
-
-p  [2, 5, 6].my_inject(:+)

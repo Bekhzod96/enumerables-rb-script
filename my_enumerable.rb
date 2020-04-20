@@ -169,28 +169,36 @@ module Enumerable
       return result 
   end
 
-  def my_inject(arg=nil,sym=nil)
-    memo = 1
-    if !block_given? 
-      case sym
-      when :*
-       my_each {|item| memo *= item} 
-      when :+
-        memo = 0
-        my_each {|item| memo += item} 
-      when :/
-        my_each {|item| memo /= item} 
-      else
-        p "Invalid value"
+  def my_inject(*arg)
+    result = nil
+    sign = nil
+
+    if arg.length == 2
+      result = arg[0]
+      sign = arg[1]
+      my_each do |item|
+        result = result.send(sign, item)
+      end
+    elsif arg[0].is_a? Symbol
+      sign = arg[0]
+      my_each do |item|
+        result = (result ? result.send(sign, item) : item)
       end
     else
-      my_each do |item| memo = yield(memo, item) end
+      result = arg[0]
+      my_each do |item|
+        result = (result ? yield(result, item) : item)
+      end
     end
-    !arg.nil? ? memo*=arg :  memo
+
+    result
   end
   
   # rubocop:enable all
-  def multiply_els
-    inject { |item| item * item }
-  end
 end
+
+def multiply_els
+  inject { |item| item * item }
+end
+
+p  [2, 5, 6].my_inject(:+)
